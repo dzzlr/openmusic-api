@@ -21,13 +21,13 @@ CREATE USER developer WITH ENCRYPTED PASSWORD 'supersecretpassword';
 
 #### Create database
 ```
-CREATE DATABASE notesapp;
+CREATE DATABASE openmusicapp;
 ```
 
 #### Manage user access
 ```
-GRANT ALL ON DATABASE notesapp TO developer;
-ALTER DATABASE notesapp OWNER TO developer;
+GRANT ALL ON DATABASE openmusicapp TO developer;
+ALTER DATABASE openmusicapp OWNER TO developer;
 ```
 
 ### Install Dependency
