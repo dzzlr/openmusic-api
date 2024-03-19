@@ -1,7 +1,3 @@
-/* eslint-disable camelcase */
-
-exports.shorthands = undefined;
-
 exports.up = (pgm) => {
   pgm.createTable('songs', {
     id: {
@@ -29,7 +25,7 @@ exports.up = (pgm) => {
     },
     albumId: {
       type: 'VARCHAR(50)',
-      references: '"albums"',
+      references: 'albums',
       onDelete: 'cascade',
     },
   });
