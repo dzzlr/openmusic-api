@@ -1,4 +1,4 @@
-# OpenMusic API V1
+# OpenMusic API V2
 
 ## Project setup
 ### Setup PostgreSQL using Docker
