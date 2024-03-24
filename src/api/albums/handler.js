@@ -1,9 +1,11 @@
 const autoBind = require('auto-bind');
 
 class AlbumsHandler {
-  constructor(service, validator) {
+  constructor(service, validator, storageService, uploadsValidator) {
     this._service = service;
     this._validator = validator;
+    this._storageService = storageService;
+    this._uploadsValidator = uploadsValidator;
 
     autoBind(this);
   }
@@ -57,6 +59,24 @@ class AlbumsHandler {
       status: 'success',
       message: 'Album berhasil diperbarui',
     };
+  }
+
+  async postUploadImageHandler(req, h) {
+    const { id } = req.params;
+    const { cover } = req.payload;
+
+    this._uploadsValidator.validateImageHeaders(cover.hapi.headers);
+
+    const filename = await this._storageService.writeFile(cover, cover.hapi);
+    const fileLocation = `http://${process.env.HOST}:${process.env.PORT}/albums/covers/${filename}`;
+    await this._service.editAlbumCoverById(id, fileLocation);
+
+    const response = h.response({
+      status: 'success',
+      message: 'Sampul berhasil diunggah',
+    });
+    response.code(201);
+    return response;
   }
 
   async deleteAlbumByIdHandler(request) {
