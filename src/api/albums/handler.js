@@ -61,9 +61,9 @@ class AlbumsHandler {
     };
   }
 
-  async postUploadImageHandler(req, h) {
-    const { id } = req.params;
-    const { cover } = req.payload;
+  async postUploadImageHandler(request, h) {
+    const { id } = request.params;
+    const { cover } = request.payload;
 
     this._uploadsValidator.validateImageHeaders(cover.hapi.headers);
 
@@ -87,6 +87,49 @@ class AlbumsHandler {
       status: 'success',
       message: 'Album berhasil dihapus',
     };
+  }
+
+  async postLikesAlbumHandler(request, h) {
+    const { id } = request.params;
+    const { id: credentialId } = request.auth.credentials;
+
+    await this._service.likeTheAlbum(id, credentialId);
+
+    const response = h.response({
+      status: 'success',
+      message: 'Berhasil menyukai album',
+    });
+    response.code(201);
+    return response;
+  }
+
+  async getAlbumLikesByIdHandler(request, h) {
+    const { id } = request.params;
+    const { likes, source } = await this._service.getAlbumLikesById(id);
+
+    const response = h.response({
+      status: 'success',
+      data: {
+        likes,
+      },
+    });
+    response.header('X-Data-Source', source);
+    response.code(200);
+    return response;
+  }
+
+  async deleteLikesAlbumHandler(request, h) {
+    const { id } = request.params;
+    const { id: credentialId } = request.auth.credentials;
+
+    await this._service.unlikeTheAlbum(id, credentialId);
+
+    const response = h.response({
+      status: 'success',
+      message: 'Berhasil membatalkan menyukai album',
+    });
+    response.code(200);
+    return response;
   }
 }
 
